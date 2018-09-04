@@ -50,17 +50,37 @@ settings:
 services:
   # Add your containers here, specifying the base image you want to build from.
   # To use this example, uncomment it and delete the curly braces after services key.
-  # You may need to run `docker pull ubuntu:trusty` for this to work.
+  # You may need to run for example `docker pull ubuntu:trusty` for this to work.
+  flask:
+      from: "centos:7"
+      roles:
+        - flask
+      entrypoint: /usr/bin/dumb-init
+      command: gunicorn -w 4 -b 0.0.0.0:4000 helloworld:app
+      ports:
+        - 4000:4000
+      working_dir: /app
+      user: flask
 
   web:
     from: "centos:7"
     roles:
       - init
       - httpd
-      #- php56
       - php70
       - mysql
       - phpmyadmin
+    ports:
+      - "80:80"
+    command: ["/usr/bin/dumb-init", "/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+    dev_overrides:
+      environment:
+        - "DEBUG=1"
+
+  thrift:
+    from: "centos:7"
+    roles:
+      - thrift
     ports:
       - "80:80"
     command: ["/usr/bin/dumb-init", "/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
