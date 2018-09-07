@@ -1,0 +1,44 @@
+  - name: Deploy dev-env
+    hosts: localhost
+    gather_facts: false
+    tasks:
+      - docker_service:
+            definition:
+                services: &id001 {}
+                version: '2'
+            state: present
+            project_name: dev-env
+        tags:
+          - start
+      - docker_service:
+            definition:
+                services: *id001
+                version: '2'
+            state: present
+            project_name: dev-env
+            restarted: true
+        tags:
+          - restart
+      - docker_service:
+            definition:
+                services: *id001
+                version: '2'
+            state: present
+            project_name: dev-env
+            stopped: true
+        tags:
+          - stop
+      - docker_service:
+            definition:
+                services: *id001
+                version: '2'
+            state: absent
+            project_name: dev-env
+            remove_volumes: yes
+        tags:
+          - destroy
+      - docker_image:
+            state: absent
+            force: yes
+            name: dev-env-conductor:latest
+        tags: destroy

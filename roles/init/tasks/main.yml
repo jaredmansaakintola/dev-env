@@ -1,11 +1,11 @@
 # file: roles/init/tasks/main.yml
 ---
 
-- name: Set up firewall
-  shell: systemctl enable firewalld
+# - name: Set up firewall
+#   shell: systemctl enable firewalld
 
-- name: Start the firewall
-  shell: systemctl start firewalld
+# - name: Start the firewall
+#   shell: systemctl start firewalld
 
 - name: Update Yum
   yum: name=* state=latest
@@ -14,7 +14,9 @@
   yum: pkg={{ item }} state=installed
   with_items:
      - git
-     - nano
+     # - firewalld
+     - dumb-init
+     - httpd
      - curl
      - gcc
      - kernel-devel
@@ -23,3 +25,11 @@
      - man
      - unzip
      - mod_ssl
+
+- name: Copy the apache configuration
+  copy:
+    src: laravel-helloworld.conf
+    dest: /etc/httpd/conf.d/laravel-helloworld.conf
+    owner: apache
+    group: root
+    mode: 655

@@ -23,11 +23,11 @@
     group: root
     state: present
     createhome: yes
-    home: "/app"
+    home: "/flask-hello-world"
 - name: Copy source into container
   synchronize:
     src: "/src/"
-    dest: "/app"
+    dest: "/flask-hello-world"
   remote_user: flask
 - name: Install Python dependencies
   pip:
