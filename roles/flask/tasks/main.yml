@@ -1,5 +1,5 @@
----
 # tasks file for flask
+---
 - name: Install dumb init
   get_url:
     dest: /usr/bin/dumb-init
@@ -23,11 +23,11 @@
     group: root
     state: present
     createhome: yes
-    home: "/flask-hello-world"
+    home: "/app"
 - name: Copy source into container
   synchronize:
     src: "/src/"
-    dest: "/flask-hello-world"
+    dest: "/app"
   remote_user: flask
 - name: Install Python dependencies
   pip:
